@@ -7,14 +7,14 @@ namespace BTS.Core
 
     public class PersistentObject : MonoBehaviour
     {
-        [SerializeField] Transform persistentObjectPrefab;
+        [SerializeField] GameObject persistentObjectPrefab;
         private static GameObject instance;
 
         private void Awake()
         {
             if (instance == null)
             {
-                Instantiate(persistentObjectPrefab);
+                instance = Instantiate(persistentObjectPrefab);
                 DontDestroyOnLoad(instance);
             }
 
