@@ -16,6 +16,8 @@ namespace BTS.Units
         private void Start()
         {
             mousePosition = FindObjectOfType<MouseToWorldPosition>();
+            selectedUnit = FindAnyObjectByType<Unit>();
+            SetSelectedUnit(selectedUnit);
         }
 
         void Update()
