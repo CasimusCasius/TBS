@@ -7,6 +7,7 @@ namespace BTS
     {
        
         [SerializeField] private float moveSpeed = 4f;
+        [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float stoppingDistance = 0.1f;
         [SerializeField] private Animator animator = null;
 
@@ -37,6 +38,9 @@ namespace BTS
             {
                 Vector3 moveDirection = (targetPosition - transform.position).normalized;
                 transform.position += moveDirection * Time.deltaTime * moveSpeed;
+
+                transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime* rotationSpeed);
+
                 animator.SetBool("isWalking", true);
             }
             else
