@@ -8,19 +8,23 @@ namespace BTS.Grid
     {
         private int width, height;
         private float cellSize;
+        private GridObject[,] gridObjectsArray;
+
 
         public GridSystem(int width, int height, float cellSize)
         {
             this.width = width;
             this.height = height;
             this.cellSize = cellSize;
-
+            
+            gridObjectsArray = new GridObject[width, height];
 
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < height; z++)
                 {
-                    Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x, z) + Vector3.right * 0.2f, Color.white, 1000);
+                    
+                    gridObjectsArray[x,z]= new GridObject(this,new GridPosition(x,z));
 
                 }
             }
@@ -36,6 +40,19 @@ namespace BTS.Grid
             return new GridPosition(
                 Mathf.RoundToInt(worldPosition.x / cellSize),
                 Mathf.RoundToInt(worldPosition.z / cellSize));
+
+        }
+
+        public void CreateDebugObjects(Transform debugPrefab)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < height; z++)
+                {
+                    var debugTransform =  GameObject.Instantiate(debugPrefab, GetWorldPosition(x,z),Quaternion.identity);
+
+                }
+            }
 
         }
 
