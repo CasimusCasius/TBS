@@ -26,10 +26,8 @@ namespace BTS.Units
 
         private void ActionSystem_OnSelectedUnitChange(object sender, System.EventArgs e)
         {
-            Debug.Log("Event action");
             if (actionSystem.GetSelectedUnit() == unit)
-            {
-                Debug.Log("Event action");
+            { 
                 meshRenderer.enabled = true;
             }
             else

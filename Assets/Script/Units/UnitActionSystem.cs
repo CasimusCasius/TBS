@@ -1,5 +1,6 @@
 ﻿using BTS.Core;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace BTS.Units
@@ -16,8 +17,15 @@ namespace BTS.Units
         private void Start()
         {
             mousePosition = FindObjectOfType<MouseToWorldPosition>();
-            selectedUnit = FindAnyObjectByType<Unit>();
+            StartCoroutine(UpdateSelectUnit());
+        }
+
+        private IEnumerator UpdateSelectUnit()
+        {
+            yield return new WaitForSeconds(0.25f);
+            selectedUnit = FindObjectOfType<Unit>();
             SetSelectedUnit(selectedUnit);
+
         }
 
         void Update()
@@ -37,7 +45,6 @@ namespace BTS.Units
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, unitLayerMask))
             {
-                Debug.Log("Changing unit");
                 if (hit.transform.TryGetComponent(out Unit unit))
                 {
                     SetSelectedUnit(unit);
