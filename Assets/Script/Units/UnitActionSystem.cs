@@ -1,4 +1,5 @@
 ﻿using BTS.Core;
+using BTS.Grid;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -13,10 +14,13 @@ namespace BTS.Units
         [SerializeField] private LayerMask unitLayerMask;
 
         private MouseToWorldPosition mousePosition;
+        private LevelGrid levelGrid;
         bool gameReady = false;
+
         private void Start()
         {
             mousePosition = FindObjectOfType<MouseToWorldPosition>();
+            levelGrid = FindAnyObjectByType<LevelGrid>();
             StartCoroutine(UpdateSelectUnit());
         }
 
@@ -35,8 +39,11 @@ namespace BTS.Units
             if (gameReady && Input.GetMouseButtonDown(0))
             {
                 if (TryHandleUnitSelection()) return;
-                
-                selectedUnit.SetMoveTarget(mousePosition.GetMousePosition());
+
+                GridPosition mouseGridPosition = levelGrid.GetGridPosition(mousePosition.GetMousePosition());
+
+                if (selectedUnit.GetMoveAction().IsValidGridPosition(mouseGridPosition))
+                    selectedUnit.GetMoveAction().SetMoveTarget(mouseGridPosition);
             }
         }
 
