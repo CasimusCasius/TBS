@@ -1,9 +1,12 @@
+
 using BTS.Core;
+using BTS.Grid;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BTS.Units
 {
-    public class Unit : MonoBehaviour
+    public class Unit : MonoBehaviour, IGridMove
     {
 
         [SerializeField] private float moveSpeed = 4f;
@@ -12,11 +15,22 @@ namespace BTS.Units
         [SerializeField] private Animator animator = null;
 
         private Vector3 targetPosition;
+        private LevelGrid levelGrid = null;
+        private GridPosition currentGridPosition;
 
         private void Awake()
         {
             targetPosition = transform.position;
         }
+
+        private void Start()
+        {
+            levelGrid = FindObjectOfType<LevelGrid>();
+            currentGridPosition = levelGrid.GetGridPosition(transform.position);
+            AddUnitAtGridPosition(currentGridPosition, this);
+
+        }
+
         private void Update()
         {
             MovingToTargetPosition();
@@ -25,6 +39,23 @@ namespace BTS.Units
         public void SetMoveTarget(Vector3 targetPosition)
         {
             this.targetPosition = targetPosition;
+        }
+        public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+        {
+            GridObject gridObject = levelGrid.GetGridObject(gridPosition);
+            gridObject.AddUnit(this);
+        }
+
+        public List<Unit> GetUnitListAtGridPosition(GridPosition gridPosition)
+        {
+            GridObject gridObject = levelGrid.GetGridObject(gridPosition);
+            return gridObject.GetUnitList();
+        }
+
+        public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+        {
+            GridObject gridObject = levelGrid.GetGridObject(gridPosition);
+            gridObject.RemoveUnit(this);
         }
 
         private void MovingToTargetPosition()
@@ -39,6 +70,19 @@ namespace BTS.Units
                 StopMove();
                 StartWalkAnimation(false);
             }
+            GridPosition newGridPosition = levelGrid.GetGridPosition(transform.position);
+
+            if (newGridPosition != currentGridPosition)
+            {
+                UnitMoveGridPosition(newGridPosition);
+                currentGridPosition = newGridPosition;
+            }
+        }
+
+        private void UnitMoveGridPosition(GridPosition newGridPosition)
+        {
+            RemoveUnitAtGridPosition(currentGridPosition, this);
+            AddUnitAtGridPosition(newGridPosition, this);
         }
 
         private void StartWalkAnimation(bool isWalking)
@@ -64,6 +108,6 @@ namespace BTS.Units
             return Vector3.Distance(targetPosition, transform.position);
         }
 
-
+        
     }
 }

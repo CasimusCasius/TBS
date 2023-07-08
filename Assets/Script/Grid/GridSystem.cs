@@ -24,7 +24,7 @@ namespace BTS.Grid
                 for (int z = 0; z < height; z++)
                 {
                     
-                    gridObjectsArray[x,z]= new GridObject(this,new GridPosition(x,z));
+                    gridObjectsArray[x,z]= new GridObject(new GridPosition(x,z));
 
                 }
             }
