@@ -42,6 +42,9 @@ namespace BTS.Grid
         }
 
         public List<Unit> GetUnitList() => units;
+
+        public bool HasAnyUnit() => units.Count > 0;
+        
         
 
     } 

@@ -55,12 +55,23 @@ namespace BTS.Grid
                     gridDebugObject.SetGridObject(GetGridObject(gridPosition));
                 }
             }
-
         }
 
         public GridObject GetGridObject(GridPosition gridPosition)
         {
             return gridObjectsArray[gridPosition.x, gridPosition.z];
+        }
+
+
+        public bool isValidGridPosition(GridPosition gridPosition)
+        {
+           ;
+
+            return (
+                gridPosition.x > 0 && 
+                gridPosition.z > 0 && 
+                gridPosition.x < width && 
+                gridPosition.z < height);
         }
 
     }
