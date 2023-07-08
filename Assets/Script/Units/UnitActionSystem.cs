@@ -13,7 +13,7 @@ namespace BTS.Units
         [SerializeField] private LayerMask unitLayerMask;
 
         private MouseToWorldPosition mousePosition;
-
+        bool gameReady = false;
         private void Start()
         {
             mousePosition = FindObjectOfType<MouseToWorldPosition>();
@@ -25,15 +25,17 @@ namespace BTS.Units
             yield return new WaitForSeconds(0.25f);
             selectedUnit = FindObjectOfType<Unit>();
             SetSelectedUnit(selectedUnit);
+            gameReady = true;
 
         }
 
         void Update()
         {
 
-            if (Input.GetMouseButtonDown(0))
+            if (gameReady && Input.GetMouseButtonDown(0))
             {
                 if (TryHandleUnitSelection()) return;
+                
                 selectedUnit.SetMoveTarget(mousePosition.GetMousePosition());
             }
         }
